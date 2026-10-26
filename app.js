@@ -8,7 +8,7 @@ try{const stored=JSON.parse(localStorage.getItem('ngu-renovate-plan')||'[]');if(
 const areas=document.getElementById('jobAreas');
 AREAS.forEach((area,index)=>{
  const section=document.createElement('details');section.className='job-area';section.open=index===0;
- const summary=document.createElement('summary');summary.innerHTML='<span>0'+(index+1)+'</span><span class="area-name"></span><b aria-hidden="true">+</b>';summary.querySelector('.area-name').textContent=area.name;section.append(summary);
+ const summary=document.createElement('summary');summary.innerHTML='<span>0'+(index+1)+'</span><span class="area-name"></span><b class="icon-plus" aria-hidden="true"></b>';summary.querySelector('.area-name').textContent=area.name;section.append(summary);
  const list=document.createElement('div');list.className='job-list';
  area.items.forEach(item=>{
   const row=document.createElement('label');row.className='job';
@@ -54,7 +54,7 @@ form.addEventListener('submit',async event=>{
  if(document.getElementById('website').value)return;
  inFlight=true;submit.disabled=true;submit.textContent='Sending your request…';
  const payload=Object.fromEntries(new FormData(form));
- payload.name=payload.name.trim();payload.email=payload.email.trim();payload._subject='Pre-sale walkthrough — '+payload.suburb.trim();payload._url=location.href.split('#')[0];
+ payload.name=payload.name.trim();payload.email=payload.email.trim();payload._subject='Seller appraisal inquiry — '+payload.suburb.trim();payload._url=location.href.split('#')[0];
  payload['Preparation plan']=document.getElementById('attachPlan').checked?planText()||'No jobs selected':'Not included';delete payload._next;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
  try{
@@ -65,7 +65,7 @@ form.addEventListener('submit',async event=>{
   form.hidden=true;const success=document.getElementById('success');success.hidden=false;success.focus();
  }catch{
   error.textContent='We couldn’t confirm delivery. Your details are still here. Please try again, or call Cyril on 0402 293 358. If the connection timed out, check with Cyril before resending.';error.hidden=false;error.scrollIntoView({block:'center',behavior:'smooth'});
- }finally{clearTimeout(timer);inFlight=false;submit.disabled=false;submit.innerHTML='Request my free walkthrough <span>↗</span>'}
+ }finally{clearTimeout(timer);inFlight=false;submit.disabled=false;submit.innerHTML='Request my plan &amp; appraisal <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg>'}
 });
 document.getElementById('phone').addEventListener('input',event=>event.target.setCustomValidity(''));
 if('IntersectionObserver' in window){const dock=document.getElementById('mobileCta');new IntersectionObserver(entries=>{const hidden=entries[0].isIntersecting;dock.classList.toggle('hide',hidden);dock.inert=hidden}).observe(document.getElementById('enquire'))}
