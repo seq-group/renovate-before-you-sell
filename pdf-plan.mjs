@@ -15,11 +15,9 @@ export function generatePlanPdf(items,dateLabel){
   for(const item of group){const names=wrap('[ ] '+item[1],74),reasons=wrap(item[3],88);const height=names.length*15+reasons.length*13+16;room(height);for(const line of names){text(line,42,y,11,true);y-=15}for(const line of reasons){text(line,57,y,9,false,.35);y-=13}y-=16}
   y-=12;
  }
- room(68);text('A STARTING POINT, NOT A QUOTE OR PROMISE OF RETURN.',42,y,9,true);y-=16;
- for(const line of wrap('Discuss your property, costs, timing and buyers with Cyril before committing to work. Use qualified trades for repairs and compliance.',102)){text(line,42,y,9,false,.35);y-=13}
  pages.push(commands.join('\n'));
  const objects=[];const add=o=>{objects.push(o);return objects.length};add('<< /Type /Catalog /Pages 2 0 R >>');add('');const f1=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'),f2=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');const kids=[];
- pages.forEach((body,index)=>{const footer=`0.65 G 42 67 m 553 67 l S\n0.3 g BT /F1 8 Tf 1 0 0 1 42 49 Tm (CYRIL TEXIER / NGU REAL ESTATE - 0402 293 358) Tj ET\nBT /F1 8 Tf 1 0 0 1 488 49 Tm (PAGE ${index+1} / ${pages.length}) Tj ET`;
+ pages.forEach((body,index)=>{const footer=`0.4 g BT /F1 7 Tf 1 0 0 1 42 82 Tm (GENERAL GUIDE ONLY. Discuss costs, timing and suitability with Cyril before committing to work.) Tj ET\nBT /F1 7 Tf 1 0 0 1 42 71 Tm (Use qualified trades. No renovation return or sale outcome is guaranteed.) Tj ET\n0.65 G 42 60 m 553 60 l S\n0.3 g BT /F1 8 Tf 1 0 0 1 42 49 Tm (CYRIL TEXIER / NGU REAL ESTATE - 0402 293 358) Tj ET\nBT /F1 8 Tf 1 0 0 1 488 49 Tm (PAGE ${index+1} / ${pages.length}) Tj ET`;
  const stream=body+'\n'+footer;const content=add(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);const pageId=add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${f1} 0 R /F2 ${f2} 0 R >> >> /Contents ${content} 0 R >>`);kids.push(`${pageId} 0 R`)});
  objects[1]=`<< /Type /Pages /Count ${pages.length} /Kids [${kids.join(' ')}] >>`;let pdf='%PDF-1.4\n',offsets=[0];objects.forEach((o,i)=>{offsets.push(pdf.length);pdf+=`${i+1} 0 obj\n${o}\nendobj\n`});const xref=pdf.length;pdf+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`+offsets.slice(1).map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('');pdf+=`trailer\n<< /Size ${objects.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;return new TextEncoder().encode(pdf);
 }
