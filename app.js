@@ -46,7 +46,7 @@ form.addEventListener('submit',async event=>{
  payload['Preparation plan']=document.getElementById('attachPlan').checked?planText()||'No jobs selected':'Not included';delete payload._next;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
  try{
-  const response=await fetch('https://formsubmit.co/ajax/cyril@ngurealestate.com.au',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
+  const response=await fetch('https://formsubmit.co/ajax/teamcyril@ngurealestate.com.au',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
   const result=await response.json();
   if(!response.ok||!(result.success===true||result.success==='true'))throw new Error('submission');
   // Confirmation is based on acceptance by the delivery service, not a claim of inbox receipt.
