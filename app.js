@@ -31,6 +31,18 @@ function sync(){
 sync();
 document.getElementById('clearPlan').addEventListener('click',()=>{selected.clear();areas.querySelectorAll('input').forEach(i=>i.checked=false);sync();save();document.getElementById('planStatus').textContent='Your list is clear. Choose the jobs you’re considering.'});
 document.getElementById('copyPlan').addEventListener('click',async()=>{const status=document.getElementById('planStatus');if(!selected.size){status.textContent='Choose at least one job first.';return}try{await navigator.clipboard.writeText('My pre-sale preparation plan\n\n'+planText());status.textContent='Copied. Keep it somewhere useful.'}catch{status.textContent='Copy isn’t available in this browser. Your selections are still saved here.'}});
+document.getElementById('downloadPlan').addEventListener('click',async()=>{
+ const status=document.getElementById('planStatus');
+ if(!selected.size){status.textContent='Choose at least one job to download your personal plan.';return}
+ try{
+  const {generatePlanPdf}=await import('./pdf-plan.mjs');
+  const date=new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
+  const bytes=generatePlanPdf([...selected].map(id=>jobs.get(id)),date);
+  const url=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
+  const a=document.createElement('a');a.href=url;a.download='My-Pre-Sale-Plan-Team-Cyril.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  status.textContent='Your personal PDF is ready. The same selected jobs can be included with your inquiry.';
+ }catch{status.textContent='The download could not be prepared. Please use Copy my list or try again.'}
+});
 const form=document.getElementById('inquiryForm'),submit=document.getElementById('submitButton'),error=document.getElementById('formError');
 document.getElementById('returnUrl').value=new URL('thank-you.html',location.href).href;
 let inFlight=false;
